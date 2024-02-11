@@ -53,7 +53,6 @@ function MedicalOrganizationPage() {
 
     return (
         <div className="page-container">
-            <div></div>
             <div className="organization-page-container">
                 <div className="organization-main-info">
                     <div className="organization-info-title">
