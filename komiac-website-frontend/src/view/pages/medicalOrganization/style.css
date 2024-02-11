@@ -1,0 +1,61 @@
+.organization-page-container {
+    width: 100%;
+    padding: 20px 0;
+    color: #303030;
+}
+
+.organization-main-info {
+    background: #75C5F0;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.organization-info-title {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.organization-info-subtitle {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.organization-info-content {
+    display: flex;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.content-text {
+    min-width: 200px;
+}
+
+.content-input {
+    width: 100%;
+    padding: 10px 5px;
+    border: 2px solid #EEEEEE;
+    border-radius: 4px;
+    font-size: 18px;
+    color: #303030;
+}
+
+.content-input:disabled {
+    background: #EEEEEE;
+}
+
+.organization-info-button {
+    width: 100%;
+    background: #00386E;
+    color: #FFFFFF;
+    padding: 10px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+}
+
+.organization-info-button:hover {
+    background-color: #002649;
+    transition-duration: 0.2s;
+}

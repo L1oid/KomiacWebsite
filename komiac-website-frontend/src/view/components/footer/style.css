@@ -1,0 +1,18 @@
+.footer {
+    display: flex;
+    background: #00386E;
+}
+
+.footer-container {
+    display: flex;
+    margin-right: 15%;
+    margin-left: 15%;
+    padding: 50px 25px;
+    width: 100%;
+    justify-content: center;
+}
+
+.footer-copyright {
+    color: #FFFFFF;
+    font-size: 18px;
+}
