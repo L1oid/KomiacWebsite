@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import "./style.css"
+import UseModulesSelectComponent from "../../components/useModulesSelect/component";
 import { getOneMedicalOrganizationData, updateOneMedicalOrganizationMainData } from "../../../state/slices/medicalOrganizationsSlice";
 
 function MedicalOrganizationPage() {
@@ -22,6 +23,7 @@ function MedicalOrganizationPage() {
     });
     const [formDbData, setFormDbData] = useState({
         dbSettings: {
+            id: "",
             vipnetSettings: {
                 id: "",
                 name: "",
@@ -33,6 +35,19 @@ function MedicalOrganizationPage() {
             provider: ""
         }
     });
+    const [formModulesData, setFormModulesData] = useState({
+        useModules: {
+            id: "",
+            isUseHomeCall: false,
+            isUseDispanserization: false,
+            isUseVaccination: false,
+            isUseAppointment: false,
+            isUseDocumentsCallback: false,
+            isUseNativeSite: false,
+            isUseDispanserizationNotification: false
+        }
+    });
+
 
     useEffect(() => {
         dispatch(getOneMedicalOrganizationData(id));
@@ -55,6 +70,7 @@ function MedicalOrganizationPage() {
         if (dataMedicalOrganization.dbSettings) {
             setFormDbData({
                 dbSettings: {
+                    id: dataMedicalOrganization.dbSettings.id,
                     vipnetSettings: {
                         id: dataMedicalOrganization.dbSettings.vipnetSettings.id,
                         name: dataMedicalOrganization.dbSettings.vipnetSettings.name,
@@ -64,6 +80,23 @@ function MedicalOrganizationPage() {
                     login: dataMedicalOrganization.dbSettings.login,
                     password: dataMedicalOrganization.dbSettings.password,
                     provider: dataMedicalOrganization.dbSettings.provider
+                }
+            })
+        }
+    }, [dataMedicalOrganization]);
+
+    useEffect(() => {
+        if (dataMedicalOrganization.useModules) {
+            setFormModulesData({
+                useModules: {
+                    id: dataMedicalOrganization.useModules.id,
+                    isUseHomeCall: dataMedicalOrganization.useModules.isUseHomeCall,
+                    isUseDispanserization: dataMedicalOrganization.useModules.isUseDispanserization,
+                    isUseVaccination: dataMedicalOrganization.useModules.isUseVaccination,
+                    isUseAppointment: dataMedicalOrganization.useModules.isUseAppointment,
+                    isUseDocumentsCallback: dataMedicalOrganization.useModules.isUseDocumentsCallback,
+                    isUseNativeSite: dataMedicalOrganization.useModules.isUseNativeSite,
+                    isUseDispanserizationNotification: dataMedicalOrganization.useModules.isUseDispanserizationNotification
                 }
             })
         }
@@ -85,6 +118,18 @@ function MedicalOrganizationPage() {
             dbSettings: {
                 ...prevState.dbSettings,
                 [name]: value
+            }
+        }));
+        setIsChange(true);
+    };
+
+    const handleModulesInputChange = (event) => {
+        const { name, value } = event.target;
+        setFormModulesData(prevState => ({
+            ...prevState,
+            useModules: {
+                ...prevState.useModules,
+                [name]: value === 'true'
             }
         }));
         setIsChange(true);
@@ -113,7 +158,6 @@ function MedicalOrganizationPage() {
 
 
     const handleConfirmButton = (formData) => {
-        console.log(isChange);
         if (isChange) {
             const data = formData;
             dispatch(updateOneMedicalOrganizationMainData({ id, data }));
@@ -216,7 +260,7 @@ function MedicalOrganizationPage() {
                     </div>
                     <button className="organization-info-button" onClick={handleConfirmButton.bind(this, formMainData)}>Подтвердить</button>
                 </div>
-                {dataMedicalOrganization.dbSettings && (
+                {dataMedicalOrganization && dataMedicalOrganization.dbSettings && (
                     <div className="organization-info-container">
                         <div className="organization-info-subtitle">
                             Параметры базы данных
@@ -281,6 +325,66 @@ function MedicalOrganizationPage() {
                         </div>
                         <button className="organization-info-button"
                                 onClick={handleConfirmButton.bind(this, formDbData)}>Подтвердить
+                        </button>
+                    </div>
+                )}
+                {dataMedicalOrganization && dataMedicalOrganization.useModules && (
+                    <div className="organization-info-container">
+                        <div className="organization-info-subtitle">
+                            Модули
+                        </div>
+                        <div className="organization-info-content">
+                            <span className="content-text">ID</span>
+                            <input
+                                className="content-input"
+                                defaultValue={dataMedicalOrganization.useModules.id}
+                                disabled
+                            />
+                        </div>
+                        <UseModulesSelectComponent
+                            title={"Звонки на дом"}
+                            name={"isUseHomeCall"}
+                            value={formModulesData.useModules.isUseHomeCall}
+                            handle={handleModulesInputChange}
+                        />
+                        <UseModulesSelectComponent
+                            title={"Диспансеризация"}
+                            name={"isUseDispanserization"}
+                            value={formModulesData.useModules.isUseDispanserization}
+                            handle={handleModulesInputChange}
+                        />
+                        <UseModulesSelectComponent
+                            title={"Вакцинация"}
+                            name={"isUseVaccination"}
+                            value={formModulesData.useModules.isUseVaccination}
+                            handle={handleModulesInputChange}
+                        />
+                        <UseModulesSelectComponent
+                            title={"Приём"}
+                            name={"isUseAppointment"}
+                            value={formModulesData.useModules.isUseAppointment}
+                            handle={handleModulesInputChange}
+                        />
+                        <UseModulesSelectComponent
+                            title={"Обратная связь по документам"}
+                            name={"isUseDocumentsCallback"}
+                            value={formModulesData.useModules.isUseDocumentsCallback}
+                            handle={handleModulesInputChange}
+                        />
+                        <UseModulesSelectComponent
+                            title={"Свой сайт"}
+                            name={"isUseNativeSite"}
+                            value={formModulesData.useModules.isUseNativeSite}
+                            handle={handleModulesInputChange}
+                        />
+                        <UseModulesSelectComponent
+                            title={"Уведомление о диспансеризации"}
+                            name={"isUseDispanserizationNotification"}
+                            value={formModulesData.useModules.isUseDispanserizationNotification}
+                            handle={handleModulesInputChange}
+                        />
+                        <button className="organization-info-button"
+                                onClick={handleConfirmButton.bind(this, formModulesData)}>Подтвердить
                         </button>
                     </div>
                 )}
