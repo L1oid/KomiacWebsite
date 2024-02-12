@@ -9,7 +9,7 @@ function HeaderComponent() {
             <div className="header-container">
                 <Link className="header-title" to={"/"}>Технический портал</Link>
                 <div className="header-menu">
-                    <Link to="/medical_organizations" className="header-menu-button">Медицинские подразделения</Link>
+                    <Link to="/" className="header-menu-button">Медицинские подразделения</Link>
                 </div>
             </div>
         </div>

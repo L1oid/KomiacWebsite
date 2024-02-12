@@ -4,10 +4,11 @@
     color: #303030;
 }
 
-.organization-main-info {
+.organization-info-container {
     background: #75C5F0;
     border-radius: 5px;
     padding: 20px;
+    margin-bottom: 20px;
 }
 
 .organization-info-title {
