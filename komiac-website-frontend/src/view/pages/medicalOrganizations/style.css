@@ -4,11 +4,11 @@
 }
 
 .organizations-container {
-    width: 80%;
+    width: 75%;
 }
 
 .search-container {
-    width: 20%;
+    width: 25%;
     height: fit-content;
     background: #75C5F0;
     border-radius: 5px;

@@ -11,6 +11,18 @@
     margin-bottom: 20px;
 }
 
+.organization-info-edit-buttons-container {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.contact-container {
+    margin-bottom: 40px;
+    border: 2px solid #EEEEEE;
+    border-radius: 5px;
+    padding: 20px;
+}
+
 .organization-info-title {
     font-size: 26px;
     font-weight: 600;
@@ -54,6 +66,11 @@
     font-size: 18px;
     border: none;
     border-radius: 5px;
+}
+
+.control {
+    width: 20%;
+    margin-left: 80%;
 }
 
 .organization-info-button:hover {

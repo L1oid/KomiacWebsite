@@ -42,6 +42,14 @@ export let data_medical_organizations = [
                 "isDeleted": false,
                 "contactType": "Phone",
                 "value": "+79009009090"
+            },
+            {
+                "id": 739,
+                "medicalOrganizationId": null,
+                "divisionId": "0007ec24-a7d8-4b80-bfb5-65026888a13a",
+                "isDeleted": false,
+                "contactType": "Email",
+                "value": "email@gmail.com"
             }
         ],
         "externalIds": [

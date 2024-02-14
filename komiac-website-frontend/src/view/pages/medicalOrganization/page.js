@@ -1,12 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import React, {useEffect, useState} from 'react';
+import {useParams} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
 
 import "./style.css"
 import BoolSelectComponent from "../../components/boolSelect/component";
 import DisabledInputComponent from "../../components/disabledInput/component";
 import EnabledInputComponent from "../../components/enabledInput/component";
-import { getOneMedicalOrganizationData, updateOneMedicalOrganizationMainData } from "../../../state/slices/medicalOrganizationsSlice";
+import {
+    addOneMedicalOrganizationExternalIdsData,
+    deleteOneMedicalOrganizationExternalIdsData,
+    addOneMedicalOrganizationContactsData,
+    deleteOneMedicalOrganizationContactsData,
+    getOneMedicalOrganizationData,
+    updateOneMedicalOrganizationData,
+} from "../../../state/slices/medicalOrganizationsSlice";
 
 function MedicalOrganizationPage() {
     const { id } = useParams();
@@ -49,14 +56,35 @@ function MedicalOrganizationPage() {
             isUseDispanserizationNotification: false
         }
     });
-
+    const [formContactsData, setFormContactsData] = useState({contacts: []});
+    const [formContactData, setFormContactData] = useState({
+        id: null,
+        medicalOrganizationId: null,
+        divisionId: "",
+        isDeleted: false,
+        contactType: "",
+        value: ""
+    })
+    const [formExternalIdsData, setFormExternalIdsData] = useState({externalIds: []});
+    const [formExternalIdData, setFormExternalIdData] = useState({
+        id: null,
+        medicalOrganizationId: null,
+        divisionId: "",
+        isDeleted: false,
+        externalSystem: "",
+        value: ""
+    })
 
     useEffect(() => {
         dispatch(getOneMedicalOrganizationData(id));
     }, [dispatch, id])
 
     useEffect(() => {
-        if (dataMedicalOrganization) {
+        if (dataMedicalOrganization &&
+            dataMedicalOrganization.dbSettings &&
+            dataMedicalOrganization.useModules &&
+            dataMedicalOrganization.contacts &&
+            dataMedicalOrganization.externalIds) {
             setFormMainData({
                 name: dataMedicalOrganization.name,
                 address: dataMedicalOrganization.address,
@@ -65,11 +93,6 @@ function MedicalOrganizationPage() {
                 divisionCode: dataMedicalOrganization.divisionCode,
                 divisionType: dataMedicalOrganization.divisionType
             });
-        }
-    }, [dataMedicalOrganization]);
-
-    useEffect(() => {
-        if (dataMedicalOrganization.dbSettings) {
             setFormDbData({
                 dbSettings: {
                     id: dataMedicalOrganization.dbSettings.id,
@@ -83,12 +106,7 @@ function MedicalOrganizationPage() {
                     password: dataMedicalOrganization.dbSettings.password,
                     provider: dataMedicalOrganization.dbSettings.provider
                 }
-            })
-        }
-    }, [dataMedicalOrganization]);
-
-    useEffect(() => {
-        if (dataMedicalOrganization.useModules) {
+            });
             setFormModulesData({
                 useModules: {
                     id: dataMedicalOrganization.useModules.id,
@@ -100,7 +118,43 @@ function MedicalOrganizationPage() {
                     isUseNativeSite: dataMedicalOrganization.useModules.isUseNativeSite,
                     isUseDispanserizationNotification: dataMedicalOrganization.useModules.isUseDispanserizationNotification
                 }
-            })
+            });
+            setFormContactsData({
+                contacts: dataMedicalOrganization.contacts.map(contact => ({
+                    id: contact.id,
+                    medicalOrganizationId: contact.medicalOrganizationId,
+                    divisionId: contact.divisionId,
+                    isDeleted: contact.isDeleted,
+                    contactType: contact.contactType,
+                    value: contact.value
+                }))
+            });
+            setFormExternalIdsData({
+                externalIds: dataMedicalOrganization.externalIds.map(externalId => ({
+                    id: externalId.id,
+                    medicalOrganizationId: externalId.medicalOrganizationId,
+                    divisionId: externalId.divisionId,
+                    isDeleted: externalId.isDeleted,
+                    externalSystem: externalId.externalSystem,
+                    value: externalId.value
+                }))
+            });
+            setFormContactData({
+                id: null,
+                medicalOrganizationId: null,
+                divisionId: dataMedicalOrganization.id,
+                isDeleted: false,
+                contactType: "",
+                value: ""
+            });
+            setFormExternalIdData({
+                id: null,
+                medicalOrganizationId: null,
+                divisionId: dataMedicalOrganization.id,
+                isDeleted: false,
+                externalSystem: "",
+                value: ""
+            });
         }
     }, [dataMedicalOrganization]);
 
@@ -158,12 +212,90 @@ function MedicalOrganizationPage() {
         setIsChange(true);
     };
 
+    const handleContactInputChange = (event, index) => {
+        const { name, value } = event.target;
+        setFormContactsData(prevState => {
+            const updatedContacts = [...prevState.contacts];
+            updatedContacts[index] = {
+                ...updatedContacts[index],
+                [name]: name === "isDeleted" ? value === 'true' : value
+            };
+            return { contacts: updatedContacts };
+        });
+        setIsChange(true);
+    };
+
+    const handleNewContactInputChange = (event) => {
+        const { name, value } = event.target;
+        setFormContactData(prevState => ({
+            ...prevState,
+            [name]: name === "isDeleted" ? value === 'true' : value
+        }));
+    };
+
+    const handleExternalIdInputChange = (event, index) => {
+        const { name, value } = event.target;
+        setFormExternalIdsData(prevState => {
+            const updatedExternalIds = [...prevState.externalIds];
+            updatedExternalIds[index] = {
+                ...updatedExternalIds[index],
+                [name]: name === "isDeleted" ? value === 'true' : value
+            };
+            return { externalIds: updatedExternalIds };
+        });
+        setIsChange(true);
+    };
+
+    const handleNewExternalIdInputChange = (event) => {
+        const { name, value } = event.target;
+        setFormExternalIdData(prevState => ({
+            ...prevState,
+            [name]: name === "isDeleted" ? value === 'true' : value
+        }));
+    };
     const handleConfirmButton = (formData) => {
         if (isChange) {
             const data = formData;
-            dispatch(updateOneMedicalOrganizationMainData({ id, data }));
+            dispatch(updateOneMedicalOrganizationData({ id, data }));
             setIsChange(false);
         }
+        console.log(formModulesData)
+    };
+
+    const handleDeleteContactButton = (id, contactId) => {
+        dispatch(deleteOneMedicalOrganizationContactsData({id: id, contactId: contactId}));
+        dispatch(getOneMedicalOrganizationData(id));
+    };
+
+    const handleAddContactButton = () => {
+        dispatch(addOneMedicalOrganizationContactsData({id: id, contactData: formContactData}))
+        setFormContactData({
+            id: null,
+            medicalOrganizationId: null,
+            divisionId: "",
+            isDeleted: false,
+            contactType: "",
+            value: ""
+        });
+        dispatch(getOneMedicalOrganizationData(id));
+    };
+
+    const handleDeleteExternalIdButton = (id, externalIdId) => {
+        dispatch(deleteOneMedicalOrganizationExternalIdsData({id: id, externalIdId: externalIdId}));
+        dispatch(getOneMedicalOrganizationData(id));
+    };
+
+    const handleAddExternalIdButton = () => {
+        dispatch(addOneMedicalOrganizationExternalIdsData({id: id, externalIdData: formExternalIdData}))
+        setFormExternalIdData({
+            id: null,
+            medicalOrganizationId: null,
+            divisionId: "",
+            isDeleted: false,
+            externalSystem: "",
+            value: ""
+        });
+        dispatch(getOneMedicalOrganizationData(id));
     };
 
     return (
@@ -337,6 +469,172 @@ function MedicalOrganizationPage() {
                         />
                         <button className="organization-info-button"
                                 onClick={handleConfirmButton.bind(this, formModulesData)}>Подтвердить
+                        </button>
+                    </div>
+                )}
+                {dataMedicalOrganization && dataMedicalOrganization.contacts && (
+                    <div className="organization-info-container">
+                        <div className="organization-info-subtitle">
+                            Контакты
+                        </div>
+                        {formContactsData.contacts.map((contact, contactIndex) => (
+                            <div className="contact-container" key={contactIndex}>
+                                <DisabledInputComponent
+                                    title={"ID"}
+                                    value={contact.id}
+                                />
+                                <DisabledInputComponent
+                                    title={"ID Организации"}
+                                    value={contact.medicalOrganizationId}
+                                />
+                                <DisabledInputComponent
+                                    title={"ID Подразделения"}
+                                    value={contact.divisionId}
+                                />
+                                <BoolSelectComponent
+                                    title={"Удалено"}
+                                    name={"isDeleted"}
+                                    value={contact.isDeleted}
+                                    handle={(event) => handleContactInputChange(event, contactIndex)}
+                                />
+                                <EnabledInputComponent
+                                    title={"Тип контакта"}
+                                    name={"contactType"}
+                                    value={contact.contactType}
+                                    handle={(event) => handleContactInputChange(event, contactIndex)}
+                                />
+                                <EnabledInputComponent
+                                    title={"Значение"}
+                                    name={"value"}
+                                    value={contact.value}
+                                    handle={(event) => handleContactInputChange(event, contactIndex)}
+                                />
+                                <button className="organization-info-button control"
+                                        onClick={handleDeleteContactButton
+                                            .bind(this, id, contact.id)}>Удалить
+                                </button>
+                            </div>
+                        ))}
+                        <div className="contact-container">
+                            <DisabledInputComponent
+                                title={"ID"}
+                                value={null}
+                            />
+                            <DisabledInputComponent
+                                title={"ID Организации"}
+                                value={null}
+                            />
+                            <DisabledInputComponent
+                                title={"ID Подразделения"}
+                                value={dataMedicalOrganization.id}
+                            />
+                            <BoolSelectComponent
+                                title={"Удалено"}
+                                name={"isDeleted"}
+                                value={formContactData.isDeleted}
+                                handle={handleNewContactInputChange}
+                            />
+                            <EnabledInputComponent
+                                title={"Тип контакта"}
+                                name={"contactType"}
+                                value={formContactData.contactType}
+                                handle={handleNewContactInputChange}
+                            />
+                            <EnabledInputComponent
+                                title={"Значение"}
+                                name={"value"}
+                                value={formContactData.value}
+                                handle={handleNewContactInputChange}
+                            />
+                            <button className="organization-info-button control"
+                                    onClick={handleAddContactButton}>Добавить
+                            </button>
+                        </div>
+                        <button className="organization-info-button"
+                                onClick={handleConfirmButton.bind(this, formContactsData)}>Подтвердить
+                        </button>
+                    </div>
+                )}
+                {dataMedicalOrganization && dataMedicalOrganization.externalIds && (
+                    <div className="organization-info-container">
+                        <div className="organization-info-subtitle">
+                            Идентификаторы в других системах
+                        </div>
+                        {formExternalIdsData.externalIds.map((externalId, externalIdIndex) => (
+                            <div className="contact-container" key={externalIdIndex}>
+                                <DisabledInputComponent
+                                    title={"ID"}
+                                    value={externalId.id}
+                                />
+                                <DisabledInputComponent
+                                    title={"ID Организации"}
+                                    value={externalId.medicalOrganizationId}
+                                />
+                                <DisabledInputComponent
+                                    title={"ID Подразделения"}
+                                    value={externalId.divisionId}
+                                />
+                                <BoolSelectComponent
+                                    title={"Удалено"}
+                                    name={"isDeleted"}
+                                    value={externalId.isDeleted}
+                                    handle={(event) => handleExternalIdInputChange(event, externalIdIndex)}
+                                />
+                                <EnabledInputComponent
+                                    title={"Система"}
+                                    name={"externalSystem"}
+                                    value={externalId.externalSystem}
+                                    handle={(event) => handleExternalIdInputChange(event, externalIdIndex)}
+                                />
+                                <EnabledInputComponent
+                                    title={"Значение"}
+                                    name={"value"}
+                                    value={externalId.value}
+                                    handle={(event) => handleExternalIdInputChange(event, externalIdIndex)}
+                                />
+                                <button className="organization-info-button control"
+                                        onClick={handleDeleteExternalIdButton
+                                            .bind(this, id, externalId.id)}>Удалить
+                                </button>
+                            </div>
+                        ))}
+                        <div className="contact-container">
+                            <DisabledInputComponent
+                                title={"ID"}
+                                value={null}
+                            />
+                            <DisabledInputComponent
+                                title={"ID Организации"}
+                                value={null}
+                            />
+                            <DisabledInputComponent
+                                title={"ID Подразделения"}
+                                value={dataMedicalOrganization.id}
+                            />
+                            <BoolSelectComponent
+                                title={"Удалено"}
+                                name={"isDeleted"}
+                                value={formExternalIdData.isDeleted}
+                                handle={handleNewExternalIdInputChange}
+                            />
+                            <EnabledInputComponent
+                                title={"Система"}
+                                name={"externalSystem"}
+                                value={formExternalIdData.externalSystem}
+                                handle={handleNewExternalIdInputChange}
+                            />
+                            <EnabledInputComponent
+                                title={"Значение"}
+                                name={"value"}
+                                value={formExternalIdData.value}
+                                handle={handleNewExternalIdInputChange}
+                            />
+                            <button className="organization-info-button control"
+                                    onClick={handleAddExternalIdButton}>Добавить
+                            </button>
+                        </div>
+                        <button className="organization-info-button"
+                                onClick={handleConfirmButton.bind(this, formExternalIdsData)}>Подтвердить
                         </button>
                     </div>
                 )}
