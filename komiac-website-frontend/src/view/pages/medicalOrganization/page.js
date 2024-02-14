@@ -30,6 +30,18 @@ function MedicalOrganizationPage() {
         divisionCode: "",
         divisionType: ""
     });
+    const [formScheduleOptionsData, setFormScheduleOptionsData] = useState({
+        scheduleOptions: {
+            id: "",
+            patientSearch: "",
+            isOnlyAttachment: false,
+            displayTickets: "",
+            daysRange: "",
+            isDoctorArea: false,
+            isAllowCreateCard: false,
+            isHasOnlyOneTicketToSpeciality: false
+        }
+    });
     const [formDbData, setFormDbData] = useState({
         dbSettings: {
             id: "",
@@ -92,6 +104,18 @@ function MedicalOrganizationPage() {
                 territoryCode: dataMedicalOrganization.territoryCode,
                 divisionCode: dataMedicalOrganization.divisionCode,
                 divisionType: dataMedicalOrganization.divisionType
+            });
+            setFormScheduleOptionsData({
+                scheduleOptions: {
+                    id: dataMedicalOrganization.scheduleOptions.id,
+                    patientSearch: dataMedicalOrganization.scheduleOptions.patientSearch,
+                    isOnlyAttachment: dataMedicalOrganization.scheduleOptions.isOnlyAttachment,
+                    displayTickets: dataMedicalOrganization.scheduleOptions.displayTickets,
+                    daysRange: dataMedicalOrganization.scheduleOptions.daysRange,
+                    isDoctorArea: dataMedicalOrganization.scheduleOptions.isDoctorArea,
+                    isAllowCreateCard: dataMedicalOrganization.scheduleOptions.isAllowCreateCard,
+                    isHasOnlyOneTicketToSpeciality: dataMedicalOrganization.scheduleOptions.isHasOnlyOneTicketToSpeciality
+                }
             });
             setFormDbData({
                 dbSettings: {
@@ -163,6 +187,30 @@ function MedicalOrganizationPage() {
         setFormMainData(prevState => ({
             ...prevState,
             [name]: value
+        }));
+        setIsChange(true);
+    };
+
+    const handleScheduleOptionsInputChange = (event) => {
+        const { name, value } = event.target;
+        setFormScheduleOptionsData(prevState => ({
+            ...prevState,
+            scheduleOptions: {
+                ...prevState.scheduleOptions,
+                [name]: value
+            }
+        }));
+        setIsChange(true);
+    };
+
+    const handleScheduleOptionsSelectChange = (event) => {
+        const { name, value } = event.target;
+        setFormScheduleOptionsData(prevState => ({
+            ...prevState,
+            scheduleOptions: {
+                ...prevState.scheduleOptions,
+                [name]: value === 'true'
+            }
         }));
         setIsChange(true);
     };
@@ -316,7 +364,7 @@ function MedicalOrganizationPage() {
                         value={dataMedicalOrganization.id}
                     />
                     <DisabledInputComponent
-                        title={"ID Подразделения"}
+                        title={"ID Организации"}
                         value={dataMedicalOrganization.medicalOrganizationId}
                     />
                     <DisabledInputComponent
@@ -361,6 +409,62 @@ function MedicalOrganizationPage() {
                         onClick={handleConfirmButton.bind(this, formMainData)}>Подтвердить
                     </button>
                 </div>
+                {dataMedicalOrganization && dataMedicalOrganization.scheduleOptions && (
+                    <div className="organization-info-container">
+                        <div className="organization-info-subtitle">
+                            Параметры расписания
+                        </div>
+                        <DisabledInputComponent
+                            title={"ID"}
+                            value={dataMedicalOrganization.scheduleOptions.id}
+                        />
+                        <EnabledInputComponent
+                            title={"Поиск пациента"}
+                            name={"patientSearch"}
+                            value={formScheduleOptionsData.scheduleOptions.patientSearch}
+                            handle={handleScheduleOptionsInputChange}
+                        />
+                        <BoolSelectComponent
+                            title={"Только прикреплённые"}
+                            name={"isOnlyAttachment"}
+                            value={formScheduleOptionsData.scheduleOptions.isOnlyAttachment}
+                            handle={handleScheduleOptionsSelectChange}
+                        />
+                        <EnabledInputComponent
+                            title={"Показ билета"}
+                            name={"displayTickets"}
+                            value={formScheduleOptionsData.scheduleOptions.displayTickets}
+                            handle={handleScheduleOptionsInputChange}
+                        />
+                        <EnabledInputComponent
+                            title={"Диапазон дней"}
+                            name={"daysRange"}
+                            value={formScheduleOptionsData.scheduleOptions.daysRange}
+                            handle={handleScheduleOptionsInputChange}
+                        />
+                        <BoolSelectComponent
+                            title={"Кабинет доктора"}
+                            name={"isDoctorArea"}
+                            value={formScheduleOptionsData.scheduleOptions.isDoctorArea}
+                            handle={handleScheduleOptionsSelectChange}
+                        />
+                        <BoolSelectComponent
+                            title={"Создание мед. карты"}
+                            name={"isAllowCreateCard"}
+                            value={formScheduleOptionsData.scheduleOptions.isAllowCreateCard}
+                            handle={handleScheduleOptionsSelectChange}
+                        />
+                        <BoolSelectComponent
+                            title={"Только один билет на специальность"}
+                            name={"isHasOnlyOneTicketToSpeciality"}
+                            value={formScheduleOptionsData.scheduleOptions.isHasOnlyOneTicketToSpeciality}
+                            handle={handleScheduleOptionsSelectChange}
+                        />
+                        <button className="organization-info-button"
+                                onClick={handleConfirmButton.bind(this, formScheduleOptionsData)}>Подтвердить
+                        </button>
+                    </div>
+                )}
                 {dataMedicalOrganization && dataMedicalOrganization.dbSettings && (
                     <div className="organization-info-container">
                         <div className="organization-info-subtitle">
@@ -629,11 +733,11 @@ function MedicalOrganizationPage() {
                                 value={formExternalIdData.value}
                                 handle={handleNewExternalIdInputChange}
                             />
-                            <button className="organization-info-button control"
+                            <button className="organization-info-button control" 
                                     onClick={handleAddExternalIdButton}>Добавить
                             </button>
                         </div>
-                        <button className="organization-info-button"
+                        <button className="organization-info-button" 
                                 onClick={handleConfirmButton.bind(this, formExternalIdsData)}>Подтвердить
                         </button>
                     </div>
