@@ -1,6 +1,6 @@
 import React from 'react';
 
-function UseModulesSelectComponent(props) {
+function BoolSelectComponent(props) {
     return (
         <div className="organization-info-content">
             <span className="content-text">{props.title}</span>
@@ -19,4 +19,4 @@ function UseModulesSelectComponent(props) {
     )
 }
 
-export default UseModulesSelectComponent;
+export default BoolSelectComponent;

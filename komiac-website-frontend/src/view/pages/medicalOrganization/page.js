@@ -3,7 +3,9 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import "./style.css"
-import UseModulesSelectComponent from "../../components/useModulesSelect/component";
+import BoolSelectComponent from "../../components/boolSelect/component";
+import DisabledInputComponent from "../../components/disabledInput/component";
+import EnabledInputComponent from "../../components/enabledInput/component";
 import { getOneMedicalOrganizationData, updateOneMedicalOrganizationMainData } from "../../../state/slices/medicalOrganizationsSlice";
 
 function MedicalOrganizationPage() {
@@ -156,7 +158,6 @@ function MedicalOrganizationPage() {
         setIsChange(true);
     };
 
-
     const handleConfirmButton = (formData) => {
         if (isChange) {
             const data = formData;
@@ -172,107 +173,71 @@ function MedicalOrganizationPage() {
                     <div className="organization-info-subtitle">
                         Главная информация
                     </div>
-                    <div className="organization-info-content">
-                        <span className="content-text">Название</span>
-                        <input
-                            className="content-input"
-                            name="name"
-                            value={formMainData.name}
-                            onChange={handleMainInputChange}
-                        />
-                    </div>
-                    <div className="organization-info-content">
-                        <span className="content-text">ID</span>
-                        <input
-                            className="content-input"
-                            defaultValue={dataMedicalOrganization.id}
-                            disabled
-                        />
-                    </div>
-                    <div className="organization-info-content">
-                        <span className="content-text">ID Подразделения</span>
-                        <input
-                            className="content-input"
-                            defaultValue={dataMedicalOrganization.medicalOrganizationId}
-                            disabled
-                        />
-                    </div>
-                    <div className="organization-info-content">
-                        <span className="content-text">Утверждена</span>
-                        <input
-                            className="content-input"
-                            value={dataMedicalOrganization.isApproved ? "Да" : "Нет"}
-                            disabled
-                        />
-                    </div>
-                    <div className="organization-info-content">
-                        <span className="content-text">Активна</span>
-                        <input
-                            className="content-input"
-                            value={dataMedicalOrganization.isActive ? "Да" : "Нет"}
-                            disabled
-                        />
-                    </div>
-                    <div className="organization-info-content">
-                        <span className="content-text">Адрес</span>
-                        <input
-                            className="content-input"
-                            name="address"
-                            value={formMainData.address}
-                            onChange={handleMainInputChange}
-                        />
-                    </div>
-                    <div className="organization-info-content">
-                        <span className="content-text">OID</span>
-                        <input
-                            className="content-input"
-                            name="oID"
-                            value={formMainData.oID}
-                            onChange={handleMainInputChange}
-                        />
-                    </div>
-                    <div className="organization-info-content">
-                        <span className="content-text">Код территории</span>
-                        <input
-                            className="content-input"
-                            name="territoryCode"
-                            value={formMainData.territoryCode}
-                            onChange={handleMainInputChange}
-                        />
-                    </div>
-                    <div className="organization-info-content">
-                        <span className="content-text">Код подразделения</span>
-                        <input
-                            className="content-input"
-                            name="divisionCode"
-                            value={formMainData.divisionCode}
-                            onChange={handleMainInputChange}
-                        />
-                    </div>
-                    <div className="organization-info-content">
-                        <span className="content-text">Тип подразделения</span>
-                        <input
-                            className="content-input"
-                            name="divisionType"
-                            value={formMainData.divisionType}
-                            onChange={handleMainInputChange}
-                        />
-                    </div>
-                    <button className="organization-info-button" onClick={handleConfirmButton.bind(this, formMainData)}>Подтвердить</button>
+                    <EnabledInputComponent
+                        title={"Название"}
+                        name={"name"}
+                        value={formMainData.name}
+                        handle={handleMainInputChange}
+                    />
+                    <DisabledInputComponent
+                        title={"ID"}
+                        value={dataMedicalOrganization.id}
+                    />
+                    <DisabledInputComponent
+                        title={"ID Подразделения"}
+                        value={dataMedicalOrganization.medicalOrganizationId}
+                    />
+                    <DisabledInputComponent
+                        title={"Утверждена"}
+                        value={dataMedicalOrganization.isApproved ? "Да" : "Нет"}
+                    />
+                    <DisabledInputComponent
+                        title={"Активна"}
+                        value={dataMedicalOrganization.isActive ? "Да" : "Нет"}
+                    />
+                    <EnabledInputComponent
+                        title={"Адрес"}
+                        name={"address"}
+                        value={formMainData.address}
+                        handle={handleMainInputChange}
+                    />
+                    <EnabledInputComponent
+                        title={"OID"}
+                        name={"oID"}
+                        value={formMainData.oID}
+                        handle={handleMainInputChange}
+                    />
+                    <EnabledInputComponent
+                        title={"Код территории"}
+                        name={"territoryCode"}
+                        value={formMainData.territoryCode}
+                        handle={handleMainInputChange}
+                    />
+                    <EnabledInputComponent
+                        title={"Код подразделения"}
+                        name={"divisionCode"}
+                        value={formMainData.divisionCode}
+                        handle={handleMainInputChange}
+                    />
+                    <EnabledInputComponent
+                        title={"Тип подразделения"}
+                        name={"divisionType"}
+                        value={formMainData.divisionType}
+                        handle={handleMainInputChange}
+                    />
+                    <button className="organization-info-button"
+                        onClick={handleConfirmButton.bind(this, formMainData)}>Подтвердить
+                    </button>
                 </div>
                 {dataMedicalOrganization && dataMedicalOrganization.dbSettings && (
                     <div className="organization-info-container">
                         <div className="organization-info-subtitle">
                             Параметры базы данных
                         </div>
-                        <div className="organization-info-content">
-                            <span className="content-text">ID</span>
-                            <input
-                                className="content-input"
-                                defaultValue={dataMedicalOrganization.dbSettings.id}
-                                disabled
-                            />
-                        </div>
+                        <DisabledInputComponent
+                            title={"ID"}
+                            value={dataMedicalOrganization.dbSettings.id}
+                        />
                         <div className="organization-info-content">
                             <span className="content-text">Сети</span>
                             <select className="content-input" onChange={handleDbSelectChange}>
@@ -285,33 +250,24 @@ function MedicalOrganizationPage() {
                                 </option>
                             </select>
                         </div>
-                        <div className="organization-info-content">
-                            <span className="content-text">Путь до БД</span>
-                            <input
-                                className="content-input"
-                                name="pathToDb"
-                                value={formDbData.dbSettings.pathToDb}
-                                onChange={handleDbInputChange}
-                            />
-                        </div>
-                        <div className="organization-info-content">
-                            <span className="content-text">Логин</span>
-                            <input
-                                className="content-input"
-                                name="login"
-                                value={formDbData.dbSettings.login}
-                                onChange={handleDbInputChange}
-                            />
-                        </div>
-                        <div className="organization-info-content">
-                            <span className="content-text">Пароль</span>
-                            <input
-                                className="content-input"
-                                name="password"
-                                value={formDbData.dbSettings.password}
-                                onChange={handleDbInputChange}
-                            />
-                        </div>
+                        <EnabledInputComponent
+                            title={"Путь до БД"}
+                            name={"pathToDb"}
+                            value={formDbData.dbSettings.pathToDb}
+                            handle={handleDbInputChange}
+                        />
+                        <EnabledInputComponent
+                            title={"Логин"}
+                            name={"login"}
+                            value={formDbData.dbSettings.login}
+                            handle={handleDbInputChange}
+                        />
+                        <EnabledInputComponent
+                            title={"Пароль"}
+                            name={"password"}
+                            value={formDbData.dbSettings.password}
+                            handle={handleDbInputChange}
+                        />
                         <div className="organization-info-content">
                             <span className="content-text">Система</span>
                             <select className="content-input"
@@ -333,51 +289,47 @@ function MedicalOrganizationPage() {
                         <div className="organization-info-subtitle">
                             Модули
                         </div>
-                        <div className="organization-info-content">
-                            <span className="content-text">ID</span>
-                            <input
-                                className="content-input"
-                                defaultValue={dataMedicalOrganization.useModules.id}
-                                disabled
-                            />
-                        </div>
-                        <UseModulesSelectComponent
+                        <DisabledInputComponent
+                            title={"ID"}
+                            value={dataMedicalOrganization.useModules.id}
+                        />
+                        <BoolSelectComponent
                             title={"Звонки на дом"}
                             name={"isUseHomeCall"}
                             value={formModulesData.useModules.isUseHomeCall}
                             handle={handleModulesInputChange}
                         />
-                        <UseModulesSelectComponent
+                        <BoolSelectComponent
                             title={"Диспансеризация"}
                             name={"isUseDispanserization"}
                             value={formModulesData.useModules.isUseDispanserization}
                             handle={handleModulesInputChange}
                         />
-                        <UseModulesSelectComponent
+                        <BoolSelectComponent
                             title={"Вакцинация"}
                             name={"isUseVaccination"}
                             value={formModulesData.useModules.isUseVaccination}
                             handle={handleModulesInputChange}
                         />
-                        <UseModulesSelectComponent
+                        <BoolSelectComponent
                             title={"Приём"}
                             name={"isUseAppointment"}
                             value={formModulesData.useModules.isUseAppointment}
                             handle={handleModulesInputChange}
                         />
-                        <UseModulesSelectComponent
+                        <BoolSelectComponent
                             title={"Обратная связь по документам"}
                             name={"isUseDocumentsCallback"}
                             value={formModulesData.useModules.isUseDocumentsCallback}
                             handle={handleModulesInputChange}
                         />
-                        <UseModulesSelectComponent
+                        <BoolSelectComponent
                             title={"Свой сайт"}
                             name={"isUseNativeSite"}
                             value={formModulesData.useModules.isUseNativeSite}
                             handle={handleModulesInputChange}
                         />
-                        <UseModulesSelectComponent
+                        <BoolSelectComponent
                             title={"Уведомление о диспансеризации"}
                             name={"isUseDispanserizationNotification"}
                             value={formModulesData.useModules.isUseDispanserizationNotification}
