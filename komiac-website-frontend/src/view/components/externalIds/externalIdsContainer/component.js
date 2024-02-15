@@ -5,74 +5,72 @@ import {useDispatch} from "react-redux";
 import BoolSelectComponent from "../../common/boolSelect/component";
 import DisabledInputComponent from "../../common/disabledInput/component";
 import EnabledInputComponent from "../../common/enabledInput/component";
-import ContactsSelectComponent from "../contactsSelect/component";
+
 import {
-    addOneMedicalOrganizationContactsData,
-    deleteOneMedicalOrganizationContactsData,
+    addOneMedicalOrganizationExternalIdsData,
+    deleteOneMedicalOrganizationExternalIdsData,
     getOneMedicalOrganizationData,
     updateOneMedicalOrganizationData,
 } from "../../../../state/slices/medicalOrganizationsSlice";
 
-function ContactsContainerComponent(props) {
+function ExternalIdsContainerComponent(props) {
     const { id } = useParams();
     const dispatch = useDispatch();
     const [isChange, setIsChange] = useState(false);
-
-    const [formContactsData, setFormContactsData] = useState({contacts: []});
-    const [formContactData, setFormContactData] = useState({
+    
+    const [formExternalIdsData, setFormExternalIdsData] = useState({externalIds: []});
+    const [formExternalIdData, setFormExternalIdData] = useState({
         id: null,
         medicalOrganizationId: null,
         divisionId: "",
         isDeleted: false,
-        contactType: "",
+        externalSystem: "",
         value: ""
     })
 
     useEffect(() => {
-        if (props.contacts) {
-            setFormContactsData({
-                contacts: props.contacts.map(contact => ({
-                    id: contact.id,
-                    medicalOrganizationId: contact.medicalOrganizationId,
-                    divisionId: contact.divisionId,
-                    isDeleted: contact.isDeleted,
-                    contactType: contact.contactType,
-                    value: contact.value
+        if (props.externalIds) {
+            setFormExternalIdsData({
+                externalIds: props.externalIds.map(externalId => ({
+                    id: externalId.id,
+                    medicalOrganizationId: externalId.medicalOrganizationId,
+                    divisionId: externalId.divisionId,
+                    isDeleted: externalId.isDeleted,
+                    externalSystem: externalId.externalSystem,
+                    value: externalId.value
                 }))
             });
-            setFormContactData({
+            setFormExternalIdData({
                 id: null,
                 medicalOrganizationId: null,
                 divisionId: id,
                 isDeleted: false,
-                contactType: "",
+                externalSystem: "",
                 value: ""
             });
         }
-    }, [id, props.contacts]);
+    }, [id, props.externalIds]);
 
-
-    const handleContactInputChange = (event, index) => {
+    const handleExternalIdInputChange = (event, index) => {
         const { name, value } = event.target;
-        setFormContactsData(prevState => {
-            const updatedContacts = [...prevState.contacts];
-            updatedContacts[index] = {
-                ...updatedContacts[index],
+        setFormExternalIdsData(prevState => {
+            const updatedExternalIds = [...prevState.externalIds];
+            updatedExternalIds[index] = {
+                ...updatedExternalIds[index],
                 [name]: name === "isDeleted" ? value === 'true' : value
             };
-            return { contacts: updatedContacts };
+            return { externalIds: updatedExternalIds };
         });
         setIsChange(true);
     };
 
-    const handleNewContactInputChange = (event) => {
+    const handleNewExternalIdInputChange = (event) => {
         const { name, value } = event.target;
-        setFormContactData(prevState => ({
+        setFormExternalIdData(prevState => ({
             ...prevState,
             [name]: name === "isDeleted" ? value === 'true' : value
         }));
     };
-
     const handleConfirmButton = (formData) => {
         if (isChange) {
             const data = formData;
@@ -81,19 +79,19 @@ function ContactsContainerComponent(props) {
         }
     };
 
-    const handleDeleteContactButton = (id, contactId) => {
-        dispatch(deleteOneMedicalOrganizationContactsData({id: id, contactId: contactId}));
+    const handleDeleteExternalIdButton = (id, externalIdId) => {
+        dispatch(deleteOneMedicalOrganizationExternalIdsData({id: id, externalIdId: externalIdId}));
         dispatch(getOneMedicalOrganizationData(id));
     };
 
-    const handleAddContactButton = () => {
-        dispatch(addOneMedicalOrganizationContactsData({id: id, contactData: formContactData}))
-        setFormContactData({
+    const handleAddExternalIdButton = () => {
+        dispatch(addOneMedicalOrganizationExternalIdsData({id: id, externalIdData: formExternalIdData}))
+        setFormExternalIdData({
             id: null,
             medicalOrganizationId: null,
             divisionId: "",
             isDeleted: false,
-            contactType: "",
+            externalSystem: "",
             value: ""
         });
         dispatch(getOneMedicalOrganizationData(id));
@@ -102,43 +100,43 @@ function ContactsContainerComponent(props) {
     return (
         <div className="organization-info-container">
             <div className="organization-info-subtitle">
-                Контакты
+                Идентификаторы в других системах
             </div>
-            {formContactsData.contacts.map((contact, contactIndex) => (
-                <div className="contact-container" key={contactIndex}>
+            {formExternalIdsData.externalIds.map((externalId, externalIdIndex) => (
+                <div className="contact-container" key={externalIdIndex}>
                     <DisabledInputComponent
                         title={"ID"}
-                        value={contact.id}
+                        value={externalId.id}
                     />
                     <DisabledInputComponent
                         title={"ID Организации"}
-                        value={contact.medicalOrganizationId}
+                        value={externalId.medicalOrganizationId}
                     />
                     <DisabledInputComponent
                         title={"ID Подразделения"}
-                        value={contact.divisionId}
+                        value={externalId.divisionId}
                     />
                     <BoolSelectComponent
                         title={"Удалено"}
                         name={"isDeleted"}
-                        value={contact.isDeleted}
-                        handle={(event) => handleContactInputChange(event, contactIndex)}
+                        value={externalId.isDeleted}
+                        handle={(event) => handleExternalIdInputChange(event, externalIdIndex)}
                     />
-                    <ContactsSelectComponent
-                        title={"Тип контакта"}
-                        name={"contactType"}
-                        value={contact.contactType}
-                        handle={(event) => handleContactInputChange(event, contactIndex)}
+                    <EnabledInputComponent
+                        title={"Система"}
+                        name={"externalSystem"}
+                        value={externalId.externalSystem}
+                        handle={(event) => handleExternalIdInputChange(event, externalIdIndex)}
                     />
                     <EnabledInputComponent
                         title={"Значение"}
                         name={"value"}
-                        value={contact.value}
-                        handle={(event) => handleContactInputChange(event, contactIndex)}
+                        value={externalId.value}
+                        handle={(event) => handleExternalIdInputChange(event, externalIdIndex)}
                     />
                     <button className="organization-info-button control"
-                            onClick={handleDeleteContactButton
-                                .bind(this, id, contact.id)}>Удалить
+                            onClick={handleDeleteExternalIdButton
+                                .bind(this, id, externalId.id)}>Удалить
                     </button>
                 </div>
             ))}
@@ -158,30 +156,30 @@ function ContactsContainerComponent(props) {
                 <BoolSelectComponent
                     title={"Удалено"}
                     name={"isDeleted"}
-                    value={formContactData.isDeleted}
-                    handle={handleNewContactInputChange}
+                    value={formExternalIdData.isDeleted}
+                    handle={handleNewExternalIdInputChange}
                 />
-                <ContactsSelectComponent
-                    title={"Тип контакта"}
-                    name={"contactType"}
-                    value={formContactData.contactType}
-                    handle={handleNewContactInputChange}
+                <EnabledInputComponent
+                    title={"Система"}
+                    name={"externalSystem"}
+                    value={formExternalIdData.externalSystem}
+                    handle={handleNewExternalIdInputChange}
                 />
                 <EnabledInputComponent
                     title={"Значение"}
                     name={"value"}
-                    value={formContactData.value}
-                    handle={handleNewContactInputChange}
+                    value={formExternalIdData.value}
+                    handle={handleNewExternalIdInputChange}
                 />
                 <button className="organization-info-button control"
-                        onClick={handleAddContactButton}>Добавить
+                        onClick={handleAddExternalIdButton}>Добавить
                 </button>
             </div>
             <button className="organization-info-button"
-                    onClick={handleConfirmButton.bind(this, formContactsData)}>Сохранить
+                    onClick={handleConfirmButton.bind(this, formExternalIdsData)}>Сохранить
             </button>
         </div>
     )
 }
 
-export default ContactsContainerComponent;
+export default ExternalIdsContainerComponent;
