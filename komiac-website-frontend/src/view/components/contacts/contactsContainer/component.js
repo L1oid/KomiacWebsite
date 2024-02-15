@@ -6,6 +6,7 @@ import BoolSelectComponent from "../../common/boolSelect/component";
 import DisabledInputComponent from "../../common/disabledInput/component";
 import EnabledInputComponent from "../../common/enabledInput/component";
 import ContactsSelectComponent from "../contactsSelect/component";
+import ContactsDropdownComponent from "../contactsDropdown/component";
 import {
     addOneMedicalOrganizationContactsData,
     deleteOneMedicalOrganizationContactsData,
@@ -104,6 +105,10 @@ function ContactsContainerComponent(props) {
             <div className="organization-info-subtitle">
                 Контакты
             </div>
+            <ContactsDropdownComponent
+                title={"Список контактов"}
+                contactsData={formContactsData.contacts}
+            />
             {formContactsData.contacts.map((contact, contactIndex) => (
                 <div className="contact-container" key={contactIndex}>
                     <DisabledInputComponent

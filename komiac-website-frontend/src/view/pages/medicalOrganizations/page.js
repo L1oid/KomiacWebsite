@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+
 import './style.css';
+import UpButtonComponent from "../../components/common/upButton/component";
 import {
     getMedicalOrganizationsData,
     clearMedicalOrganizationsData,
@@ -67,6 +69,7 @@ function MedicalOrganizationsPage() {
 
     return (
         <div className="page-container">
+            <UpButtonComponent/>
             <div className="organizations-page-container">
                 <div className="search-container">
                     <p className="search-title">Поиск</p>

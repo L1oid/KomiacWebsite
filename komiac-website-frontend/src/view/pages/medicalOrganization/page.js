@@ -3,6 +3,7 @@ import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 
 import "./style.css"
+import UpButtonComponent from "../../components/common/upButton/component";
 import BoolSelectComponent from "../../components/common/boolSelect/component";
 import DisabledInputComponent from "../../components/common/disabledInput/component";
 import EnabledInputComponent from "../../components/common/enabledInput/component";
@@ -82,6 +83,7 @@ function MedicalOrganizationPage() {
 
     return (
         <div className="page-container">
+            <UpButtonComponent/>
             <div className="organization-page-container">
                 <div className="organization-info-container">
                     <div className="organization-info-subtitle">
@@ -144,22 +146,22 @@ function MedicalOrganizationPage() {
                         handle={handleMainInputChange}
                     />
                     <button className="organization-info-button"
-                        onClick={handleConfirmButton.bind(this, formMainData)}>Сохранить
+                            onClick={handleConfirmButton.bind(this, formMainData)}>Сохранить
                     </button>
                 </div>
                 {dataMedicalOrganization && dataMedicalOrganization.scheduleOptions && (
                     <ScheduleOptionsContainerComponent
-                        scheduleOptions = {dataMedicalOrganization.scheduleOptions}
+                        scheduleOptions={dataMedicalOrganization.scheduleOptions}
                     />
                 )}
                 {dataMedicalOrganization && dataMedicalOrganization.dbSettings && (
                     <DbSettingsContainerComponent
-                        dbSettings = {dataMedicalOrganization.dbSettings}
+                        dbSettings={dataMedicalOrganization.dbSettings}
                     />
                 )}
                 {dataMedicalOrganization && dataMedicalOrganization.useModules && (
                     <UseModulesContainerComponent
-                        useModules = {dataMedicalOrganization.useModules}
+                        useModules={dataMedicalOrganization.useModules}
                     />
                 )}
                 {dataMedicalOrganization && dataMedicalOrganization.contacts && (
