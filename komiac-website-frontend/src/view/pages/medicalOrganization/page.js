@@ -6,12 +6,12 @@ import "./style.css"
 import BoolSelectComponent from "../../components/common/boolSelect/component";
 import DisabledInputComponent from "../../components/common/disabledInput/component";
 import EnabledInputComponent from "../../components/common/enabledInput/component";
-import DbSettingsComponent from "../../components/dbSettings/dbSettingsContainer/component";
+import DbSettingsContainerComponent from "../../components/dbSettings/dbSettingsContainer/component";
+import ContactsContainerComponent from "../../components/contacts/contactsContainer/component";
+
 import {
     addOneMedicalOrganizationExternalIdsData,
     deleteOneMedicalOrganizationExternalIdsData,
-    addOneMedicalOrganizationContactsData,
-    deleteOneMedicalOrganizationContactsData,
     getOneMedicalOrganizationData,
     updateOneMedicalOrganizationData,
 } from "../../../state/slices/medicalOrganizationsSlice";
@@ -57,15 +57,6 @@ function MedicalOrganizationPage() {
             isUseDispanserizationNotification: false
         }
     });
-    const [formContactsData, setFormContactsData] = useState({contacts: []});
-    const [formContactData, setFormContactData] = useState({
-        id: null,
-        medicalOrganizationId: null,
-        divisionId: "",
-        isDeleted: false,
-        contactType: "",
-        value: ""
-    })
     const [formExternalIdsData, setFormExternalIdsData] = useState({externalIds: []});
     const [formExternalIdData, setFormExternalIdData] = useState({
         id: null,
@@ -83,7 +74,6 @@ function MedicalOrganizationPage() {
     useEffect(() => {
         if (dataMedicalOrganization &&
             dataMedicalOrganization.useModules &&
-            dataMedicalOrganization.contacts &&
             dataMedicalOrganization.externalIds) {
             setFormMainData({
                 name: dataMedicalOrganization.name,
@@ -119,16 +109,6 @@ function MedicalOrganizationPage() {
                     isUseDispanserizationNotification: dataMedicalOrganization.useModules.isUseDispanserizationNotification
                 }
             });
-            setFormContactsData({
-                contacts: dataMedicalOrganization.contacts.map(contact => ({
-                    id: contact.id,
-                    medicalOrganizationId: contact.medicalOrganizationId,
-                    divisionId: contact.divisionId,
-                    isDeleted: contact.isDeleted,
-                    contactType: contact.contactType,
-                    value: contact.value
-                }))
-            });
             setFormExternalIdsData({
                 externalIds: dataMedicalOrganization.externalIds.map(externalId => ({
                     id: externalId.id,
@@ -138,14 +118,6 @@ function MedicalOrganizationPage() {
                     externalSystem: externalId.externalSystem,
                     value: externalId.value
                 }))
-            });
-            setFormContactData({
-                id: null,
-                medicalOrganizationId: null,
-                divisionId: dataMedicalOrganization.id,
-                isDeleted: false,
-                contactType: "",
-                value: ""
             });
             setFormExternalIdData({
                 id: null,
@@ -212,27 +184,6 @@ function MedicalOrganizationPage() {
         setIsChange(true);
     };
 
-    const handleContactInputChange = (event, index) => {
-        const { name, value } = event.target;
-        setFormContactsData(prevState => {
-            const updatedContacts = [...prevState.contacts];
-            updatedContacts[index] = {
-                ...updatedContacts[index],
-                [name]: name === "isDeleted" ? value === 'true' : value
-            };
-            return { contacts: updatedContacts };
-        });
-        setIsChange(true);
-    };
-
-    const handleNewContactInputChange = (event) => {
-        const { name, value } = event.target;
-        setFormContactData(prevState => ({
-            ...prevState,
-            [name]: name === "isDeleted" ? value === 'true' : value
-        }));
-    };
-
     const handleExternalIdInputChange = (event, index) => {
         const { name, value } = event.target;
         setFormExternalIdsData(prevState => {
@@ -259,24 +210,6 @@ function MedicalOrganizationPage() {
             dispatch(updateOneMedicalOrganizationData({ id, data }));
             setIsChange(false);
         }
-    };
-
-    const handleDeleteContactButton = (id, contactId) => {
-        dispatch(deleteOneMedicalOrganizationContactsData({id: id, contactId: contactId}));
-        dispatch(getOneMedicalOrganizationData(id));
-    };
-
-    const handleAddContactButton = () => {
-        dispatch(addOneMedicalOrganizationContactsData({id: id, contactData: formContactData}))
-        setFormContactData({
-            id: null,
-            medicalOrganizationId: null,
-            divisionId: "",
-            isDeleted: false,
-            contactType: "",
-            value: ""
-        });
-        dispatch(getOneMedicalOrganizationData(id));
     };
 
     const handleDeleteExternalIdButton = (id, externalIdId) => {
@@ -426,7 +359,9 @@ function MedicalOrganizationPage() {
                     </div>
                 )}
                 {dataMedicalOrganization && dataMedicalOrganization.dbSettings && (
-                    <DbSettingsComponent dbSettings = {dataMedicalOrganization.dbSettings}></DbSettingsComponent>
+                    <DbSettingsContainerComponent
+                        dbSettings = {dataMedicalOrganization.dbSettings}
+                    />
                 )}
                 {dataMedicalOrganization && dataMedicalOrganization.useModules && (
                     <div className="organization-info-container">
@@ -485,87 +420,10 @@ function MedicalOrganizationPage() {
                     </div>
                 )}
                 {dataMedicalOrganization && dataMedicalOrganization.contacts && (
-                    <div className="organization-info-container">
-                        <div className="organization-info-subtitle">
-                            Контакты
-                        </div>
-                        {formContactsData.contacts.map((contact, contactIndex) => (
-                            <div className="contact-container" key={contactIndex}>
-                                <DisabledInputComponent
-                                    title={"ID"}
-                                    value={contact.id}
-                                />
-                                <DisabledInputComponent
-                                    title={"ID Организации"}
-                                    value={contact.medicalOrganizationId}
-                                />
-                                <DisabledInputComponent
-                                    title={"ID Подразделения"}
-                                    value={contact.divisionId}
-                                />
-                                <BoolSelectComponent
-                                    title={"Удалено"}
-                                    name={"isDeleted"}
-                                    value={contact.isDeleted}
-                                    handle={(event) => handleContactInputChange(event, contactIndex)}
-                                />
-                                <EnabledInputComponent
-                                    title={"Тип контакта"}
-                                    name={"contactType"}
-                                    value={contact.contactType}
-                                    handle={(event) => handleContactInputChange(event, contactIndex)}
-                                />
-                                <EnabledInputComponent
-                                    title={"Значение"}
-                                    name={"value"}
-                                    value={contact.value}
-                                    handle={(event) => handleContactInputChange(event, contactIndex)}
-                                />
-                                <button className="organization-info-button control"
-                                        onClick={handleDeleteContactButton
-                                            .bind(this, id, contact.id)}>Удалить
-                                </button>
-                            </div>
-                        ))}
-                        <div className="contact-container">
-                            <DisabledInputComponent
-                                title={"ID"}
-                                value={null}
-                            />
-                            <DisabledInputComponent
-                                title={"ID Организации"}
-                                value={null}
-                            />
-                            <DisabledInputComponent
-                                title={"ID Подразделения"}
-                                value={dataMedicalOrganization.id}
-                            />
-                            <BoolSelectComponent
-                                title={"Удалено"}
-                                name={"isDeleted"}
-                                value={formContactData.isDeleted}
-                                handle={handleNewContactInputChange}
-                            />
-                            <EnabledInputComponent
-                                title={"Тип контакта"}
-                                name={"contactType"}
-                                value={formContactData.contactType}
-                                handle={handleNewContactInputChange}
-                            />
-                            <EnabledInputComponent
-                                title={"Значение"}
-                                name={"value"}
-                                value={formContactData.value}
-                                handle={handleNewContactInputChange}
-                            />
-                            <button className="organization-info-button control"
-                                    onClick={handleAddContactButton}>Добавить
-                            </button>
-                        </div>
-                        <button className="organization-info-button"
-                                onClick={handleConfirmButton.bind(this, formContactsData)}>Сохранить
-                        </button>
-                    </div>
+                    <ContactsContainerComponent
+                        divisionId={dataMedicalOrganization.id}
+                        contacts={dataMedicalOrganization.contacts}
+                    />
                 )}
                 {dataMedicalOrganization && dataMedicalOrganization.externalIds && (
                     <div className="organization-info-container">

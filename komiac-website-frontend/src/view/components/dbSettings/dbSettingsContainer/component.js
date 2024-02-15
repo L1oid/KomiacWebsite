@@ -12,7 +12,7 @@ import {
     updateOneMedicalOrganizationData
 } from "../../../../state/slices/medicalOrganizationsSlice";
 
-function DbSettingsComponent(props) {
+function DbSettingsContainerComponent(props) {
     const { id } = useParams();
     const dispatch = useDispatch();
     const [isChange, setIsChange] = useState(false);
@@ -141,4 +141,4 @@ function DbSettingsComponent(props) {
     )
 }
 
-export default DbSettingsComponent;
+export default DbSettingsContainerComponent;
