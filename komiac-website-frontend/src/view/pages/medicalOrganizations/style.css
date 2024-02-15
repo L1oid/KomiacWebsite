@@ -1,6 +1,6 @@
 .organizations-page-container {
     display: flex;
-    padding: 20px 0;
+    padding-top: 20px;
 }
 
 .organizations-container {
@@ -51,6 +51,12 @@
     border-radius: 5px;
     margin-bottom: 20px;
     padding: 20px;
+}
+
+.organization-item-empty {
+    display: flex;
+    justify-content: center;
+    padding: 130px 130px;
 }
 
 .organization-item-title {

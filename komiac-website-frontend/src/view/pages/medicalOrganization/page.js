@@ -24,6 +24,8 @@ function MedicalOrganizationPage() {
     const [isChange, setIsChange] = useState(false);
     const [formMainData, setFormMainData] = useState({
         name: "",
+        isApproved: false,
+        isActive: false,
         address: "",
         oID: "",
         territoryCode: "",
@@ -99,6 +101,8 @@ function MedicalOrganizationPage() {
             dataMedicalOrganization.externalIds) {
             setFormMainData({
                 name: dataMedicalOrganization.name,
+                isApproved: dataMedicalOrganization.isApproved,
+                isActive: dataMedicalOrganization.isActive,
                 address: dataMedicalOrganization.address,
                 oID: dataMedicalOrganization.oID,
                 territoryCode: dataMedicalOrganization.territoryCode,
@@ -187,6 +191,15 @@ function MedicalOrganizationPage() {
         setFormMainData(prevState => ({
             ...prevState,
             [name]: value
+        }));
+        setIsChange(true);
+    };
+
+    const handleMainSelectChange = (event) => {
+        const { name, value } = event.target;
+        setFormMainData(prevState => ({
+            ...prevState,
+            [name]: value === 'true'
         }));
         setIsChange(true);
     };
@@ -307,7 +320,6 @@ function MedicalOrganizationPage() {
             dispatch(updateOneMedicalOrganizationData({ id, data }));
             setIsChange(false);
         }
-        console.log(formModulesData)
     };
 
     const handleDeleteContactButton = (id, contactId) => {
@@ -367,13 +379,17 @@ function MedicalOrganizationPage() {
                         title={"ID Организации"}
                         value={dataMedicalOrganization.medicalOrganizationId}
                     />
-                    <DisabledInputComponent
+                    <BoolSelectComponent
                         title={"Утверждена"}
-                        value={dataMedicalOrganization.isApproved ? "Да" : "Нет"}
+                        name={"isApproved"}
+                        value={formMainData.isApproved}
+                        handle={handleMainSelectChange}
                     />
-                    <DisabledInputComponent
+                    <BoolSelectComponent
                         title={"Активна"}
-                        value={dataMedicalOrganization.isActive ? "Да" : "Нет"}
+                        name={"isActive"}
+                        value={formMainData.isActive}
+                        handle={handleMainSelectChange}
                     />
                     <EnabledInputComponent
                         title={"Адрес"}
@@ -406,7 +422,7 @@ function MedicalOrganizationPage() {
                         handle={handleMainInputChange}
                     />
                     <button className="organization-info-button"
-                        onClick={handleConfirmButton.bind(this, formMainData)}>Подтвердить
+                        onClick={handleConfirmButton.bind(this, formMainData)}>Сохранить
                     </button>
                 </div>
                 {dataMedicalOrganization && dataMedicalOrganization.scheduleOptions && (
@@ -418,12 +434,17 @@ function MedicalOrganizationPage() {
                             title={"ID"}
                             value={dataMedicalOrganization.scheduleOptions.id}
                         />
-                        <EnabledInputComponent
-                            title={"Поиск пациента"}
-                            name={"patientSearch"}
-                            value={formScheduleOptionsData.scheduleOptions.patientSearch}
-                            handle={handleScheduleOptionsInputChange}
-                        />
+                        <div className="organization-info-content">
+                            <span className="content-text">Поиск пациента</span>
+                            <select className="content-input"
+                                    name="patientSearch"
+                                    value={formScheduleOptionsData.scheduleOptions.patientSearch}
+                                    onChange={handleScheduleOptionsInputChange}>
+                                <option value={formScheduleOptionsData.scheduleOptions.patientSearch}>
+                                    {formScheduleOptionsData.scheduleOptions.patientSearch}
+                                </option>
+                            </select>
+                        </div>
                         <BoolSelectComponent
                             title={"Только прикреплённые"}
                             name={"isOnlyAttachment"}
@@ -431,7 +452,7 @@ function MedicalOrganizationPage() {
                             handle={handleScheduleOptionsSelectChange}
                         />
                         <EnabledInputComponent
-                            title={"Показ билета"}
+                            title={"Отображаемый тип талонов"}
                             name={"displayTickets"}
                             value={formScheduleOptionsData.scheduleOptions.displayTickets}
                             handle={handleScheduleOptionsInputChange}
@@ -461,7 +482,7 @@ function MedicalOrganizationPage() {
                             handle={handleScheduleOptionsSelectChange}
                         />
                         <button className="organization-info-button"
-                                onClick={handleConfirmButton.bind(this, formScheduleOptionsData)}>Подтвердить
+                                onClick={handleConfirmButton.bind(this, formScheduleOptionsData)}>Сохранить
                         </button>
                     </div>
                 )}
@@ -475,7 +496,7 @@ function MedicalOrganizationPage() {
                             value={dataMedicalOrganization.dbSettings.id}
                         />
                         <div className="organization-info-content">
-                            <span className="content-text">Сети</span>
+                            <span className="content-text">Сеть</span>
                             <select className="content-input" onChange={handleDbSelectChange}>
                                 <option data-id={dataMedicalOrganization.dbSettings.vipnetSettings.id}
                                         data-name={dataMedicalOrganization.dbSettings.vipnetSettings.name}
@@ -516,7 +537,7 @@ function MedicalOrganizationPage() {
                             </select>
                         </div>
                         <button className="organization-info-button"
-                                onClick={handleConfirmButton.bind(this, formDbData)}>Подтвердить
+                                onClick={handleConfirmButton.bind(this, formDbData)}>Сохранить
                         </button>
                     </div>
                 )}
@@ -572,7 +593,7 @@ function MedicalOrganizationPage() {
                             handle={handleModulesInputChange}
                         />
                         <button className="organization-info-button"
-                                onClick={handleConfirmButton.bind(this, formModulesData)}>Подтвердить
+                                onClick={handleConfirmButton.bind(this, formModulesData)}>Сохранить
                         </button>
                     </div>
                 )}
@@ -655,7 +676,7 @@ function MedicalOrganizationPage() {
                             </button>
                         </div>
                         <button className="organization-info-button"
-                                onClick={handleConfirmButton.bind(this, formContactsData)}>Подтвердить
+                                onClick={handleConfirmButton.bind(this, formContactsData)}>Сохранить
                         </button>
                     </div>
                 )}
@@ -738,7 +759,7 @@ function MedicalOrganizationPage() {
                             </button>
                         </div>
                         <button className="organization-info-button" 
-                                onClick={handleConfirmButton.bind(this, formExternalIdsData)}>Подтвердить
+                                onClick={handleConfirmButton.bind(this, formExternalIdsData)}>Сохранить
                         </button>
                     </div>
                 )}
