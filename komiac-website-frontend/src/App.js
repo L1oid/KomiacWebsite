@@ -2,7 +2,7 @@ import React from 'react';
 import {Route, Routes} from 'react-router-dom';
 
 import Layout from "./view/pages/layout/page";
-import ScrollToTopComponent from "./view/components/scrollToTop/component";
+import ScrollToTopComponent from "./view/components/layout/scrollToTop/component";
 
 import MedicalOrganizationsPage from "./view/pages/medicalOrganizations/page";
 import MedicalOrganizationPage from "./view/pages/medicalOrganization/page";

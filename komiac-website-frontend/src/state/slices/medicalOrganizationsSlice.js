@@ -1,12 +1,14 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {data_medical_organizations} from "../../data/data";
+import {networks_list} from "../../data/networks";
 
 
 const medicalOrganizationsSlice = createSlice({
     name: "medicalOrganizations",
     initialState: {
         organizationsData: [],
-        organizationData: {}
+        organizationData: {},
+        networksData: []
     },
     reducers: {
         getMedicalOrganizationsData(state) {
@@ -77,6 +79,12 @@ const medicalOrganizationsSlice = createSlice({
                     externalIds: [...data_medical_organizations[organizationIndex].externalIds, externalIdData]
                 };
             }
+        },
+        getNetworksData(state) {
+            state.networksData.push(...networks_list);
+        },
+        clearNetworksData(state) {
+            state.networksData.splice(0, state.networksData.length);
         }
     }
 })
@@ -89,5 +97,7 @@ export const {
     deleteOneMedicalOrganizationContactsData,
     addOneMedicalOrganizationContactsData,
     deleteOneMedicalOrganizationExternalIdsData,
-    addOneMedicalOrganizationExternalIdsData} = medicalOrganizationsSlice.actions;
+    addOneMedicalOrganizationExternalIdsData,
+    getNetworksData,
+    clearNetworksData} = medicalOrganizationsSlice.actions;
 export default medicalOrganizationsSlice.reducer;
