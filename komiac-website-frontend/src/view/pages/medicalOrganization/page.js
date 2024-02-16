@@ -85,95 +85,101 @@ function MedicalOrganizationPage() {
         <div className="page-container">
             <UpButtonComponent/>
             <div className="organization-page-container">
-                <div className="organization-info-container">
-                    <div className="organization-info-subtitle">
-                        Главная информация
+                <div className="organization-page-container-row-1">
+                    <div className="organization-page-container-column-1">
+                        <div className="organization-info-container">
+                            <div className="organization-info-subtitle">
+                                Главная информация
+                            </div>
+                            <EnabledInputComponent
+                                title={"Название"}
+                                name={"name"}
+                                value={formMainData.name}
+                                handle={handleMainInputChange}
+                            />
+                            <DisabledInputComponent
+                                title={"ID"}
+                                value={dataMedicalOrganization.id}
+                            />
+                            <DisabledInputComponent
+                                title={"ID Организации"}
+                                value={dataMedicalOrganization.medicalOrganizationId}
+                            />
+                            <BoolSelectComponent
+                                title={"Утверждена"}
+                                name={"isApproved"}
+                                value={formMainData.isApproved}
+                                handle={handleMainSelectChange}
+                            />
+                            <BoolSelectComponent
+                                title={"Активна"}
+                                name={"isActive"}
+                                value={formMainData.isActive}
+                                handle={handleMainSelectChange}
+                            />
+                            <EnabledInputComponent
+                                title={"Адрес"}
+                                name={"address"}
+                                value={formMainData.address}
+                                handle={handleMainInputChange}
+                            />
+                            <EnabledInputComponent
+                                title={"OID"}
+                                name={"oID"}
+                                value={formMainData.oID}
+                                handle={handleMainInputChange}
+                            />
+                            <EnabledInputComponent
+                                title={"Код территории"}
+                                name={"territoryCode"}
+                                value={formMainData.territoryCode}
+                                handle={handleMainInputChange}
+                            />
+                            <EnabledInputComponent
+                                title={"Код подразделения"}
+                                name={"divisionCode"}
+                                value={formMainData.divisionCode}
+                                handle={handleMainInputChange}
+                            />
+                            <EnabledInputComponent
+                                title={"Тип подразделения"}
+                                name={"divisionType"}
+                                value={formMainData.divisionType}
+                                handle={handleMainInputChange}
+                            />
+                            <button className="organization-info-button"
+                                    onClick={handleConfirmButton.bind(this, formMainData)}>Сохранить
+                            </button>
+                        </div>
+                        {dataMedicalOrganization && dataMedicalOrganization.scheduleOptions && (
+                            <ScheduleOptionsContainerComponent
+                                scheduleOptions={dataMedicalOrganization.scheduleOptions}
+                            />
+                        )}
+                        {dataMedicalOrganization && dataMedicalOrganization.dbSettings && (
+                            <DbSettingsContainerComponent
+                                dbSettings={dataMedicalOrganization.dbSettings}
+                            />
+                        )}
                     </div>
-                    <EnabledInputComponent
-                        title={"Название"}
-                        name={"name"}
-                        value={formMainData.name}
-                        handle={handleMainInputChange}
-                    />
-                    <DisabledInputComponent
-                        title={"ID"}
-                        value={dataMedicalOrganization.id}
-                    />
-                    <DisabledInputComponent
-                        title={"ID Организации"}
-                        value={dataMedicalOrganization.medicalOrganizationId}
-                    />
-                    <BoolSelectComponent
-                        title={"Утверждена"}
-                        name={"isApproved"}
-                        value={formMainData.isApproved}
-                        handle={handleMainSelectChange}
-                    />
-                    <BoolSelectComponent
-                        title={"Активна"}
-                        name={"isActive"}
-                        value={formMainData.isActive}
-                        handle={handleMainSelectChange}
-                    />
-                    <EnabledInputComponent
-                        title={"Адрес"}
-                        name={"address"}
-                        value={formMainData.address}
-                        handle={handleMainInputChange}
-                    />
-                    <EnabledInputComponent
-                        title={"OID"}
-                        name={"oID"}
-                        value={formMainData.oID}
-                        handle={handleMainInputChange}
-                    />
-                    <EnabledInputComponent
-                        title={"Код территории"}
-                        name={"territoryCode"}
-                        value={formMainData.territoryCode}
-                        handle={handleMainInputChange}
-                    />
-                    <EnabledInputComponent
-                        title={"Код подразделения"}
-                        name={"divisionCode"}
-                        value={formMainData.divisionCode}
-                        handle={handleMainInputChange}
-                    />
-                    <EnabledInputComponent
-                        title={"Тип подразделения"}
-                        name={"divisionType"}
-                        value={formMainData.divisionType}
-                        handle={handleMainInputChange}
-                    />
-                    <button className="organization-info-button"
-                            onClick={handleConfirmButton.bind(this, formMainData)}>Сохранить
-                    </button>
+                    <div className="organization-page-container-column-2">
+                        {dataMedicalOrganization && dataMedicalOrganization.useModules && (
+                            <UseModulesContainerComponent
+                                useModules={dataMedicalOrganization.useModules}
+                            />
+                        )}
+                        {dataMedicalOrganization && dataMedicalOrganization.contacts && (
+                            <ContactsContainerComponent
+                                contacts={dataMedicalOrganization.contacts}
+                            />
+                        )}
+                        {dataMedicalOrganization && dataMedicalOrganization.externalIds && (
+                            <ExternalIdsContainerComponent
+                                externalIds={dataMedicalOrganization.externalIds}
+                            />
+                        )}</div>
                 </div>
-                {dataMedicalOrganization && dataMedicalOrganization.scheduleOptions && (
-                    <ScheduleOptionsContainerComponent
-                        scheduleOptions={dataMedicalOrganization.scheduleOptions}
-                    />
-                )}
-                {dataMedicalOrganization && dataMedicalOrganization.dbSettings && (
-                    <DbSettingsContainerComponent
-                        dbSettings={dataMedicalOrganization.dbSettings}
-                    />
-                )}
-                {dataMedicalOrganization && dataMedicalOrganization.useModules && (
-                    <UseModulesContainerComponent
-                        useModules={dataMedicalOrganization.useModules}
-                    />
-                )}
-                {dataMedicalOrganization && dataMedicalOrganization.contacts && (
-                    <ContactsContainerComponent
-                        contacts={dataMedicalOrganization.contacts}
-                    />
-                )}
-                {dataMedicalOrganization && dataMedicalOrganization.externalIds && (
-                    <ExternalIdsContainerComponent
-                        externalIds={dataMedicalOrganization.externalIds}
-                    />
-                )}
+                <div className="organization-page-container-row-2"></div>
             </div>
         </div>
     )

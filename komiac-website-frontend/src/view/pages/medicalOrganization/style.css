@@ -1,3 +1,32 @@
+.organization-page-container-row-1 {
+    display: flex;
+}
+
+.organization-page-container-column-1 {
+    margin-right: 10px;
+    width: 50%;
+}
+
+.organization-page-container-column-2 {
+    margin-left: 10px;
+    width: 50%;
+}
+
+@media screen and (max-width: 899px) {
+    .organization-page-container-row-1 {
+        display: block;
+    }
+    .organization-page-container-column-1 {
+        margin-right: 0;
+        width: 100%;
+    }
+    .organization-page-container-column-2 {
+        margin-left: 0;
+        width: 100%;
+    }
+}
+
+
 .organization-page-container {
     width: 100%;
     padding: 20px 0 0 0;
@@ -37,13 +66,13 @@
 }
 
 .organization-info-content {
-    display: flex;
-    font-size: 18px;
     margin-bottom: 15px;
 }
 
 .content-text {
-    min-width: 245px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 5px;
 }
 
 .content-input {
@@ -51,7 +80,7 @@
     padding: 10px 5px;
     border: 2px solid #EEEEEE;
     border-radius: 4px;
-    font-size: 18px;
+    font-size: 16px;
     color: #303030;
 }
 
@@ -70,8 +99,9 @@
 }
 
 .control {
-    width: 20%;
-    margin-left: 80%;
+    display: block;
+    width: 120px;
+    margin: 0 0 0 auto;
 }
 
 .organization-info-button:hover {
@@ -88,7 +118,7 @@
 .drop-btn {
     background-color: white;
     padding: 10px 5px;
-    font-size: 18px;
+    font-size: 16px;
     color: #303030;
     border: 2px solid #EEEEEE;
     border-radius: 4px;
@@ -99,7 +129,7 @@
 
 .drop-input {
     width: 100%;
-    font-size: 18px;
+    font-size: 16px;
     padding: 10px 15px;
     border: 0;
     border-radius: 4px;

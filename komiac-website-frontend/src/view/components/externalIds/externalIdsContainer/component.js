@@ -71,6 +71,7 @@ function ExternalIdsContainerComponent(props) {
                 value: ""
             });
             setShowEditExternalIdForm(false);
+            setShowAddExternalIdForm(true);
             setFormExternalIdsData({ externalIds: [] });
             setFormExternalIdData({
                 id: null,
@@ -227,14 +228,18 @@ function ExternalIdsContainerComponent(props) {
                         value={formExternalIdData.value}
                         handle={handleNewExternalIdInputChange}
                     />
-                    <button className="organization-info-button control"
-                            onClick={handleAddExternalIdButton}>Добавить
-                    </button>
                 </div>
             )}
-            <button className="organization-info-button"
-                    onClick={handleConfirmButton.bind(this, formExternalIdsData)}>Сохранить
-            </button>
+            {showAddExternalIdForm && (
+                <button className="organization-info-button"
+                        onClick={handleAddExternalIdButton}>Добавить
+                </button>
+            )}
+            {showEditExternalIdForm && (
+                <button className="organization-info-button"
+                        onClick={handleConfirmButton.bind(this, formExternalIdsData)}>Сохранить
+                </button>
+            )}
         </div>
     )
 }

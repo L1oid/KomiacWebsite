@@ -72,6 +72,7 @@ function ContactsContainerComponent(props) {
                 value: ""
             });
             setShowEditContactForm(false);
+            setShowAddContactForm(true);
             setFormContactsData({ contacts: [] });
             setFormContactData({
                 id: null,
@@ -228,14 +229,18 @@ function ContactsContainerComponent(props) {
                         value={formContactData.value}
                         handle={handleNewContactInputChange}
                     />
-                    <button className="organization-info-button control"
-                            onClick={handleAddContactButton}>Добавить
-                    </button>
                 </div>
             )}
-            <button className="organization-info-button"
-                    onClick={handleConfirmButton.bind(this, formContactsData)}>Сохранить
-            </button>
+            {showAddContactForm && (
+                <button className="organization-info-button"
+                        onClick={handleAddContactButton}>Добавить
+                </button>
+            )}
+            {showEditContactForm && (
+                <button className="organization-info-button"
+                        onClick={handleConfirmButton.bind(this, formContactsData)}>Сохранить
+                </button>
+            )}
         </div>
     )
 }

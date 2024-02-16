@@ -24,10 +24,14 @@ function ContactsDropdownComponent(props) {
 
     return (
         <div className="organization-info-content">
-            <span className="content-text">{props.title}</span>
+            <div className="content-text">
+                <span>
+                    {props.title}
+                </span>
+            </div>
             <div className="dropdown">
                 <button onClick={handleButtonClick} className="drop-btn">
-                    Показать контакты
+                Показать контакты
                 </button>
                 <div className={`dropdown-content ${showDropdown ? 'show' : ''}`}>
                     <input type="text" placeholder="Поиск по значению" className="drop-input"

@@ -37,10 +37,14 @@ function DbSettingsDropdownComponent(props) {
 
     return (
         <div className="organization-info-content">
-            <span className="content-text">{props.title}</span>
+            <div className="content-text">
+                <span>
+                    {props.title}
+                </span>
+            </div>
             <div className="dropdown">
                 <button onClick={handleButtonClick} className="drop-btn">
-                    {"ID: " + selectedNetwork.id + " | "}
+                {"ID: " + selectedNetwork.id + " | "}
                     {"Название: " + selectedNetwork.name + " | "}
                     {"Адресс: " + selectedNetwork.address}
                 </button>

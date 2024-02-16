@@ -11,9 +11,32 @@
     align-items: center;
     margin-right: auto;
     margin-left: auto;
-    max-width: 1100px;
     height: 100%;
     width: 100%;
+}
+
+@media screen and (max-width: 599px) {
+    .header-container {
+        max-width: 445px;
+    }
+}
+
+@media screen and (min-width: 600px) and (max-width: 899px) {
+    .header-container {
+        max-width: 500px;
+    }
+}
+
+@media screen and (min-width: 900px) and (max-width: 1199px) {
+    .header-container {
+        max-width: 800px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .header-container {
+        max-width: 1100px;
+    }
 }
 
 .header-title {

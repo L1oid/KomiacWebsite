@@ -16,6 +16,29 @@
     padding: 20px;
 }
 
+@media screen and (max-width: 899px) {
+    .organizations-page-container {
+        display: block;
+    }
+    .organizations-container {
+        width: 100%;
+    }
+    .search-container {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+}
+
+@media screen and (min-width: 900px) and (max-width: 1199px) {
+    .organizations-container {
+        width: 69%;
+    }
+    .search-container {
+        width: 41%;
+    }
+}
+
 .search-title {
     color: #303030;
     font-size: 18px;
