@@ -6,7 +6,7 @@ function DisabledInputComponent(props) {
             <span className="content-text">{props.title}</span>
             <input
                 className="content-input"
-                defaultValue={props.value}
+                value={props.value || ''}
                 disabled
             />
         </div>

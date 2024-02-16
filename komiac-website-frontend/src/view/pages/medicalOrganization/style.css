@@ -18,9 +18,10 @@
 
 .contact-container {
     margin-bottom: 40px;
-    border: 2px solid #EEEEEE;
-    border-radius: 5px;
-    padding: 20px;
+}
+
+.contacts-dropdown-container {
+    margin-bottom: 40px;
 }
 
 .organization-info-title {
