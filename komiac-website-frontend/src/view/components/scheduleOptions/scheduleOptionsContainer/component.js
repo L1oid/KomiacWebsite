@@ -122,7 +122,7 @@ function ScheduleOptionsContainerComponent(props) {
                 handle={handleScheduleOptionsSelectChange}
             />
             <BoolSelectComponent
-                title={"Только один билет на специальность"}
+                title={"Только один талон на специальность"}
                 name={"isHasOnlyOneTicketToSpeciality"}
                 value={formScheduleOptionsData.scheduleOptions.isHasOnlyOneTicketToSpeciality}
                 handle={handleScheduleOptionsSelectChange}

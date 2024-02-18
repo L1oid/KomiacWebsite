@@ -6,7 +6,7 @@ import BoolSelectComponent from "../../common/boolSelect/component";
 import DisabledInputComponent from "../../common/disabledInput/component";
 import EnabledInputComponent from "../../common/enabledInput/component";
 import ExternalIdsDropdownComponent from "../externalIdsDropdown/component";
-
+import ConfirmationDialogComponent from "../../common/сonfirmationDialog/component";
 import {
     addOneMedicalOrganizationExternalIdsData,
     deleteOneMedicalOrganizationExternalIdsData,
@@ -28,6 +28,7 @@ function ExternalIdsContainerComponent(props) {
     });
     const [showAddExternalIdForm, setShowAddExternalIdForm] = useState(false);
     const [showEditExternalIdForm, setShowEditExternalIdForm] = useState(false);
+    const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
 
     const [formExternalIdsData, setFormExternalIdsData] = useState({ externalIds: [] });
     const [formExternalIdData, setFormExternalIdData] = useState({
@@ -115,7 +116,12 @@ function ExternalIdsContainerComponent(props) {
         }
     };
 
+    const handleDeleteConfirmation = (id, contactId) => {
+        setShowConfirmationDialog(true);
+    };
+
     const handleDeleteExternalIdButton = (id, externalIdId) => {
+        setShowConfirmationDialog(false);
         dispatch(deleteOneMedicalOrganizationExternalIdsData({ id: id, externalIdId: externalIdId }));
         dispatch(getOneMedicalOrganizationData(id));
     };
@@ -192,9 +198,16 @@ function ExternalIdsContainerComponent(props) {
                         handle={handleExternalIdInputChange}
                     />
                     <button className="organization-info-button control"
-                            onClick={() => handleDeleteExternalIdButton(id, selectedExternalId.id)}>Удалить
+                            onClick={() => handleDeleteConfirmation(id, selectedExternalId.id)}>Удалить
                     </button>
                 </div>
+            )}
+            {showConfirmationDialog && (
+                <ConfirmationDialogComponent
+                    message="Вы подтверждаете удаление?"
+                    onConfirm={() => handleDeleteExternalIdButton(id, selectedExternalId.id)}
+                    onCancel={() => setShowConfirmationDialog(false)}
+                />
             )}
             {showAddExternalIdForm && (
                 <div className="contact-container">

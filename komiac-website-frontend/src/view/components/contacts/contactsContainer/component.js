@@ -8,6 +8,7 @@ import DisabledInputComponent from "../../common/disabledInput/component";
 import EnabledInputComponent from "../../common/enabledInput/component";
 import ContactsSelectComponent from "../contactsSelect/component";
 import ContactsDropdownComponent from "../contactsDropdown/component";
+import ConfirmationDialogComponent from "../../common/сonfirmationDialog/component";
 import {
     addOneMedicalOrganizationContactsData,
     deleteOneMedicalOrganizationContactsData,
@@ -29,6 +30,7 @@ function ContactsContainerComponent(props) {
     });
     const [showAddContactForm, setShowAddContactForm] = useState(false);
     const [showEditContactForm, setShowEditContactForm] = useState(false);
+    const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
 
     const [formContactsData, setFormContactsData] = useState({ contacts: [] });
     const [formContactData, setFormContactData] = useState({
@@ -116,7 +118,13 @@ function ContactsContainerComponent(props) {
         }
     };
 
+
+    const handleDeleteConfirmation = (id, contactId) => {
+        setShowConfirmationDialog(true);
+    };
+
     const handleDeleteContactButton = (id, contactId) => {
+        setShowConfirmationDialog(false);
         dispatch(deleteOneMedicalOrganizationContactsData({ id: id, contactId: contactId }));
         dispatch(getOneMedicalOrganizationData(id));
     };
@@ -193,9 +201,16 @@ function ContactsContainerComponent(props) {
                         handle={handleContactInputChange}
                     />
                     <button className="organization-info-button control"
-                            onClick={() => handleDeleteContactButton(id, selectedContact.id)}>Удалить
+                            onClick={() => handleDeleteConfirmation(id, selectedContact.id)}>Удалить
                     </button>
                 </div>
+            )}
+            {showConfirmationDialog && (
+                <ConfirmationDialogComponent
+                    message="Вы подтверждаете удаление?"
+                    onConfirm={() => handleDeleteContactButton(id, selectedContact.id)}
+                    onCancel={() => setShowConfirmationDialog(false)}
+                />
             )}
             {showAddContactForm && (
                 <div className="contact-container">
